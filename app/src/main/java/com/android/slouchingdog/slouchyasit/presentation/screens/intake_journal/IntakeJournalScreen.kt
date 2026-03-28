@@ -24,13 +24,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.android.slouchingdog.slouchyasit.R
-import com.android.slouchingdog.slouchyasit.domain.entities.DosageIntakeEntity
+import com.android.slouchingdog.slouchyasit.domain.entities.IntakeEntity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IntakeJournalScreen() {
     val viewModel: IntakeJournalViewModel = viewModel()
-    val intakesList: List<DosageIntakeEntity> by viewModel.intakesList.collectAsState()
+    val intakesList: List<IntakeEntity> by viewModel.intakesList.collectAsState()
 
     Scaffold(
         topBar = {
@@ -49,16 +49,19 @@ fun IntakeJournalScreen() {
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
+                .padding(start = 8.dp, end = 8.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             intakesList.forEach {
                 item {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp, end = 8.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("${it.date}")
+                        Text("${it.intakeDate}")
                         Text(it.dosage)
                         Text("${it.dropsNumber} капли")
                         if (it.isTaken) {

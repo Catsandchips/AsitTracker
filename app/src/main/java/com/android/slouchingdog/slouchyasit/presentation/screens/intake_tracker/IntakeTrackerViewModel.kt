@@ -1,11 +1,13 @@
 package com.android.slouchingdog.slouchyasit.presentation.screens.intake_tracker
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.time.LocalDate
 
+@HiltViewModel
 class IntakeTrackerViewModel : ViewModel() {
     private val _trackerState: MutableStateFlow<IntakeTrackerState> =
         MutableStateFlow(IntakeTrackerState())
