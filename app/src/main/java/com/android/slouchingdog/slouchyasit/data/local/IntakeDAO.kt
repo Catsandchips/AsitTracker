@@ -12,11 +12,15 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface IntakeDAO {
     @Query("SELECT * FROM $TABLE_NAME WHERE id = :id")
-    suspend fun getIntakeById(id: String): IntakeDBO
+    fun getIntakeById(id: String): Flow<IntakeDBO?>
+
+    @Query("SELECT * FROM $TABLE_NAME WHERE intakeDate = :date")
+    fun getIntakeByDate(date: Long): Flow<IntakeDBO?>
 
     @Query("SELECT * FROM $TABLE_NAME ORDER BY intakeDate DESC")
-    suspend fun getAllIntakes(): Flow<List<IntakeDBO>>
+    fun getAllIntakes(): Flow<List<IntakeDBO>>
 
     @Insert(onConflict = REPLACE)
     suspend fun addIntake(intakeDBO: IntakeDBO)
+
 }

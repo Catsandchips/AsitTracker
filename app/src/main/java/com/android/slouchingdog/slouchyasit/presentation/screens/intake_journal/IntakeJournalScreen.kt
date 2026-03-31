@@ -1,5 +1,6 @@
 package com.android.slouchingdog.slouchyasit.presentation.screens.intake_journal
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +13,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,29 +22,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.android.slouchingdog.slouchyasit.R
 import com.android.slouchingdog.slouchyasit.domain.entities.IntakeEntity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IntakeJournalScreen() {
-    val viewModel: IntakeJournalViewModel = viewModel()
+fun IntakeJournalScreen(onIntakeRowClick: (String) -> Unit) {
+    val viewModel: IntakeJournalViewModel = hiltViewModel()
     val intakesList: List<IntakeEntity> by viewModel.intakesList.collectAsState()
 
     Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("Журнал приема") },
-                navigationIcon = {
-                    IconButton(onClick = {}) {
-                        Icon(
-                            painter = painterResource(R.drawable.menu_24px),
-                            contentDescription = "Menu"
-                        )
-                    }
-                })
-        }
+        topBar = { CenterAlignedTopAppBar(title = { Text("Журнал приема") }) }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -58,6 +47,9 @@ fun IntakeJournalScreen() {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .clickable(onClick = {
+                                onIntakeRowClick(it.id)
+                            })
                             .padding(start = 8.dp, end = 8.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {

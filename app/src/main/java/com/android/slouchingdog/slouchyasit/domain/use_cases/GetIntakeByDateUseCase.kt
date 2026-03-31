@@ -4,8 +4,8 @@ import com.android.slouchingdog.slouchyasit.domain.entities.IntakeEntity
 import com.android.slouchingdog.slouchyasit.domain.repository.IntakeRepository
 import kotlinx.coroutines.flow.Flow
 
-class GetIntakeByIdUseCase(private val intakeRepository: IntakeRepository) {
-    suspend operator fun invoke(id: String): Flow<IntakeEntity?> {
-        return intakeRepository.getIntakeById(id)
+class GetIntakeByDateUseCase(private val intakeRepository: IntakeRepository) {
+    suspend operator fun invoke(date: Long): Flow<IntakeEntity?> {
+        return intakeRepository.getIntakeByDate(date)
     }
 }

@@ -23,16 +23,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.android.slouchingdog.slouchyasit.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IntakeTrackerScreen() {
-    val viewModel: IntakeTrackerViewModel = viewModel()
+fun IntakeTrackerScreen(id: String, onBackButtonClick: () -> Unit) {
+    val viewModel =
+        hiltViewModel<IntakeTrackerViewModel, IntakeTrackerViewModel.IntakeTrackerViewModelFactory>(
+            creationCallback = { it.create(id) }
+        )
     val trackerState: IntakeTrackerState by viewModel.trackerState.collectAsState()
     Scaffold(
         topBar = {
@@ -43,9 +45,9 @@ fun IntakeTrackerScreen() {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = { onBackButtonClick() }) {
                         Icon(
-                            painter = painterResource(R.drawable.menu_24px),
+                            painter = painterResource(R.drawable.arrow_back_24px),
                             contentDescription = "Menu button"
                         )
                     }
@@ -124,10 +126,4 @@ fun IntakeTrackerScreen() {
         }
 
     }
-}
-
-@Preview
-@Composable
-fun IntakeTrackerPreview() {
-    IntakeTrackerScreen()
 }

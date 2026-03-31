@@ -13,8 +13,12 @@ class IntakeRepositoryImpl(private val intakeDAO: IntakeDAO) : IntakeRepository 
         return intakeDAO.getAllIntakes().map { it.mapToIntakeEntityList() }
     }
 
-    override suspend fun getIntakeById(id: String): IntakeEntity {
-        return intakeDAO.getIntakeById(id).mapToIntakeEntity()
+    override suspend fun getIntakeById(id: String): Flow<IntakeEntity?> {
+        return intakeDAO.getIntakeById(id).map { it?.mapToIntakeEntity() }
+    }
+
+    override suspend fun getIntakeByDate(date: Long): Flow<IntakeEntity?> {
+        return intakeDAO.getIntakeByDate(date).map { it?.mapToIntakeEntity() }
     }
 
     override suspend fun addIntake(intakeEntity: IntakeEntity) {

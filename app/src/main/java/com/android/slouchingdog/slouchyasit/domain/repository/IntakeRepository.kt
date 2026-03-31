@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface IntakeRepository {
     suspend fun getIntakes(): Flow<List<IntakeEntity>>
-    suspend fun getIntakeById(id: String): IntakeEntity
+    suspend fun getIntakeById(id: String): Flow<IntakeEntity?>
+    suspend fun getIntakeByDate(date: Long): Flow<IntakeEntity?>
     suspend fun addIntake(intakeEntity: IntakeEntity)
+
 }
