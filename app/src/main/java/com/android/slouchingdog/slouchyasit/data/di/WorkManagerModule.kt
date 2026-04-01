@@ -13,7 +13,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object WorkManagerModule {
     @Provides
-    fun provideWorkManager(@ApplicationContext context: Context): WorkManager{
+    fun provideWorkManager(@ApplicationContext context: Context): WorkManager {
         return WorkManager.getInstance(context)
     }
 }
