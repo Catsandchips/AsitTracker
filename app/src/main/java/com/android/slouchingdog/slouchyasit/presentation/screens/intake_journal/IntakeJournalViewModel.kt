@@ -14,15 +14,19 @@ import javax.inject.Inject
 @HiltViewModel
 class IntakeJournalViewModel @Inject constructor(val getIntakeListUseCase: GetIntakeListUseCase) :
     ViewModel() {
-    private val _intakesList: MutableStateFlow<List<IntakeEntity>> =
-        MutableStateFlow(listOf())
-    val intakesList = _intakesList.asStateFlow()
+    private val _intakeJournalState: MutableStateFlow<IntakeJournalState> =
+        MutableStateFlow(IntakeJournalState())
+    val intakeJournalState = _intakeJournalState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            getIntakeListUseCase().collect {
-                _intakesList.update { it }
+            getIntakeListUseCase().collect {intakes ->
+                _intakeJournalState.update { it.copy(intakeList = intakes) }
             }
         }
     }
 }
+
+data class IntakeJournalState(
+    val intakeList: List<IntakeEntity> = emptyList()
+)

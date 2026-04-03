@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -25,13 +25,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.android.slouchingdog.slouchyasit.R
-import com.android.slouchingdog.slouchyasit.domain.entities.IntakeEntity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IntakeJournalScreen(onIntakeRowClick: (String) -> Unit) {
     val viewModel: IntakeJournalViewModel = hiltViewModel()
-    val intakesList: List<IntakeEntity> by viewModel.intakesList.collectAsState()
+    val intakeJournalState: IntakeJournalState by viewModel.intakeJournalState.collectAsState()
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(title = { Text("Журнал приема") }) }
@@ -43,39 +42,38 @@ fun IntakeJournalScreen(onIntakeRowClick: (String) -> Unit) {
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            intakesList.forEach {
-                item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(onClick = {
-                                onIntakeRowClick(it.id)
-                            })
-                            .padding(start = 8.dp, end = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text("${it.intakeDate}")
-                        Text(it.dosage)
-                        Text("${it.dropsNumber} капли")
-                        if (it.isTaken) {
-                            Icon(
-                                painter = painterResource(R.drawable.check_24px),
-                                tint = Color.Green,
-                                contentDescription = "'Is taken' icon"
-                            )
+            items(intakeJournalState.intakeList) {intake ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = {
+                            onIntakeRowClick(intake.id)
+                        })
+                        .padding(start = 8.dp, end = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text("${intake.intakeDate}")
+                    Text(intake.dosage)
+                    Text("${intake.dropsNumber} капли")
+                    if (intake.isTaken) {
+                        Icon(
+                            painter = painterResource(R.drawable.check_24px),
+                            tint = Color.Green,
+                            contentDescription = "'Is taken' icon"
+                        )
 
-                        } else {
-                            Icon(
-                                painter = painterResource(R.drawable.close_24px),
-                                tint = Color.Red,
-                                contentDescription = "'Is not taken' icon"
-                            )
-                        }
+                    } else {
+                        Icon(
+                            painter = painterResource(R.drawable.close_24px),
+                            tint = Color.Red,
+                            contentDescription = "'Is not taken' icon"
+                        )
                     }
-                    Spacer(Modifier.height(8.dp))
-                    HorizontalDivider(thickness = 2.dp)
                 }
+                Spacer(Modifier.height(8.dp))
+                HorizontalDivider(thickness = 2.dp)
             }
         }
+
     }
 }
